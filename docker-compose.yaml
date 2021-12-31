@@ -1,0 +1,32 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres:14
+    environment: 
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=example
+    ports: 
+      - 5432:5432
+    volumes:
+      - database-data:/var/lib/postgresql/data/ 
+      - ./postgresql:/setup
+
+  trino:
+    image: trinodb/trino
+    ports: 
+      - 8080:8080
+    volumes: 
+      - ./trino/catalog:/etc/trino/catalog
+      - ./trino/config.properties:/etc/trino/config.properties
+
+  metabase:
+    image: metabase/metabase
+    ports: 
+      - 3000:3000
+    volumes: 
+      - metabase-data:/metabase-data
+
+volumes:
+  database-data: 
+  metabase-data:
